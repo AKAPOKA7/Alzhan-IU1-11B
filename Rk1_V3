@@ -1,0 +1,54 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+struct Dish {
+    std::string name;
+    int quantity;
+    double pricePerPortion;
+};
+
+bool compareDishes(const Dish& dish1, const Dish& dish2) {
+    return dish1.name < dish2.name;
+}
+
+int main() {
+    int numOrders;
+
+    std::cout << "Введите количество заказанных блюд: ";
+    std::cin >> numOrders;
+
+    std::vector<Dish> orders;
+
+    for (int i = 0; i < numOrders; ++i) {
+        Dish order;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Очищаем буфер ввода
+        std::cout << "Введите название блюда " << (i + 1) << ": ";
+        std::getline(std::cin, order.name);
+        std::cout << "Введите количество порций блюда " << (i + 1) << ": ";
+        std::cin >> order.quantity;
+        std::cout << "Введите стоимость за порцию блюда " << (i + 1) << ": ";
+        std::cin >> order.pricePerPortion;
+        orders.push_back(order);
+
+        double totalOrderCost = order.quantity * order.pricePerPortion;
+        std::cout << "Общая стоимость заказа: " << totalOrderCost << std::endl;
+    }
+
+    std::sort(orders.begin(), orders.end(), compareDishes);
+
+    std::cout << "Заказанные блюда:" << std::endl;
+    for (const Dish& order : orders) {
+        std::cout << order.name << " - Количество: " << order.quantity << ", Стоимость за порцию: " << order.pricePerPortion << std::endl;
+    }
+
+    double totalCost = 0.0;
+    for (const Dish& order : orders) {
+        totalCost += order.quantity * order.pricePerPortion;
+    }
+
+    std::cout << "Общая сумма всех заказов: " << totalCost << std::endl;
+
+    return 0;
+}
